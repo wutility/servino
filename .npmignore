@@ -1,0 +1,15 @@
+examples/
+node_modules/
+dist/
+tests/
+lib/
+notes/
+testr/
+
+.gitignore
+.cache
+.vscode
+.babelrc
+
+rollup.config.js
+watch.js

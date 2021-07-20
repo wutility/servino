@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+notes/
+examples/
+production/
+testr/
+
+.cache
+.vscode
+package-lock.json
+
+watch.js
