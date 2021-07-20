@@ -62,9 +62,10 @@ Servino.start = function (config = {}) {
       const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
       const serverUrl = `http://${address}:${addr.port}/`  
 
+      // child.exec('open http://localhost:' + port)
       open(serverUrl) // open in the browser
 
-      console.log(`Serving`, root.yellow, 'at', serverUrl.cyan)
+      console.log('[Serving]', root.yellow, 'at', serverUrl.cyan)
       verbose && console.log('Ready for changes')
     })
     .on('error', e => {
@@ -98,7 +99,7 @@ Servino.start = function (config = {}) {
         if (path.includes('.css')) fileType = 'reloadCss'
         if (path.includes('.js')) type = 'reloadJs'
 
-        verbose && console.log('Change detected'.cyan, path.replace(/\\/g, '/').yellow)
+        verbose && console.log('[Change detected]'.cyan, path.replace(/\\/g, '/').yellow)
         Servino.reload({ fileType, path, content })
       }, wait)
     });

@@ -1,7 +1,7 @@
 {
   "name": "servino",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Simple and fast development http server with live reload",
   "bin": {
     "servino": "bin/cli",
     "sv": "bin/cli"
@@ -14,9 +14,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "http",
+    "server",
+    "live",
+    "reload",
+    "development",
+    "tool"
+  ],
+  "author": "Haikel Fazzani",
+  "license": "MIT",
   "dependencies": {
     "chokidar": "^3.5.2",
     "colors": "^1.4.0",

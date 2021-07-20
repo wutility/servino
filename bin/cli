@@ -1,9 +1,11 @@
+#!/usr/bin/env node
+
 const Servino = require('../src/Servino');
 const argv = require('minimist')(process.argv.slice(2));
 
 (function () {
 
-  console.log(argv);
+  // console.log(argv);
 
   let config = {
     host: argv.host,
