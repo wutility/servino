@@ -1,19 +1,17 @@
 const Servino = require('../src/Servino');
+const argv = require('minimist')(process.argv.slice(2));
 
 (function () {
 
-  function parseArgs (key) {
-    const arg = process.argv.filter(val => val.startsWith('--' + key))
-    return arg.length ? arg.pop().split('=').pop() : null
-  }
+  console.log(argv);
 
   let config = {
-    host: parseArgs('host'),
-    port: 8125,
-    root: parseArgs('root'),
-    wait: parseArgs('wait') ? parseInt(parseArgs('wait')) : null,
-    watch: parseArgs('watch') ? parseArgs('watch').includes(',') ? parseArgs('watch').split(',') : parseArgs('watch') : null,
-    verbose: parseArgs('quiet') ? false : true,
+    host: argv.host,
+    port: argv.port,
+    root: argv.root,
+    wait: argv.wait,
+    wdir: argv.wdir,
+    verbose: argv.verbose,
   }
 
   Servino.start(config)

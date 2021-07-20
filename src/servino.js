@@ -9,6 +9,7 @@ const open = require('open')
 const http = require('http')
 const path = require('path').posix
 const fs = require('fs')
+
 require('colors')
 
 let Servino = {
@@ -20,11 +21,13 @@ let clients = []
 
 Servino.start = function (config = {}) {
   const host = config.host || '0.0.0.0'
-  const port = config.port || 3000
-  const root = config.root ? path.join(process.cwd(), config.root).replace(/\\/g, '/') : process.cwd().replace(/\\/g, '/')
+  const port = config.port || 8125  
   const wait = config.wait || 100
-  const watch = config.watch || [root]
-  const verbose = config.verbose === undefined || config.verbose === null ? true : config.verbose
+
+  const root = config.root ? path.join(process.cwd(), config.root).replace(/\\/g, '/') : process.cwd().replace(/\\/g, '/')
+  const wdir = config.wdir || [root]
+
+  const verbose = config.verbose || true
 
   const index = serveIndex(root, { 'icons': true })
   const serve = serveStatic(root, { index: false })
@@ -53,14 +56,15 @@ Servino.start = function (config = {}) {
   })
     .listen(port, host)
     .on('listening', () => {
-      
+
       Servino.server = server
       const addr = server.address()
       const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
+      const serverUrl = `http://${address}:${addr.port}/`  
 
-      console.log(`Serving`, root.yellow, 'at', `http://${address}:${addr.port}/`.cyan)
+      open(serverUrl) // open in the browser
 
-      open(`http://${address}:${addr.port}/`)
+      console.log(`Serving`, root.yellow, 'at', serverUrl.cyan)
       verbose && console.log('Ready for changes')
     })
     .on('error', e => {
@@ -71,7 +75,7 @@ Servino.start = function (config = {}) {
       else {
         Servino.shutdown()
       }
-    })
+    });
 
   // WebSocket
   server.on('upgrade', (request, socket, body) => {
@@ -81,8 +85,8 @@ Servino.start = function (config = {}) {
   });
 
   // Watch & reload
-  Servino.watcher = chokidar.watch(watch, {
-    ignored: /(^|[\/\\])\../, // ignore dotfiles
+  Servino.watcher = chokidar.watch(wdir, {
+    ignored: /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
     persistent: true
   })
     .on('change', path => {
