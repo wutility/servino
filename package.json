@@ -20,7 +20,8 @@
     "live",
     "reload",
     "development",
-    "tool"
+    "tool",
+    "cli"
   ],
   "author": "Haikel Fazzani",
   "license": "MIT",
