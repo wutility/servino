@@ -4,9 +4,6 @@ const Servino = require('../src/servino');
 const argv = require('minimist')(process.argv.slice(2));
 
 (function () {
-
-  console.log(argv);
-
   let config = {
     host: argv.host,
     port: argv.port,

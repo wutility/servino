@@ -24,7 +24,7 @@ module.exports = class Servino {
       port: cfg.port || 8125,
       root: rootPath,
       wdir: cfg.wdir || [rootPath],
-      wait: cfg.wait || 100,      
+      wait: cfg.wait || 100,
       wignore: cfg.wignore || /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
       verbose: cfg.verbose || true
     }
@@ -64,7 +64,7 @@ module.exports = class Servino {
 
       ws.onclose = () => {
         clients = clients.filter(i => i !== ws)
-      }      
+      }
     });
 
     // Watch & reload files
@@ -75,7 +75,7 @@ module.exports = class Servino {
       .on('change', path => {
         setTimeout(() => {
           let content = fs.readFileSync(path, 'utf8') // file content
-          path = '/' + path.replace(__dirname, '') // file path
+          path = path.replace(__dirname, '') // file path
 
           let fileType = 'reload'
           if (path.includes('.css')) fileType = 'reloadCss'
