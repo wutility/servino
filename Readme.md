@@ -9,8 +9,16 @@ $ npm i -g servino
 
 ## CLI
 ```json
-// you can use servino or sv
-servino --port 8125 --verbose false --wdir dist,public
+// Command: servino or sv
+servino
+/* Example of console ouput
+  [Serving]  http://127.0.0.1:8125
+  [Path]  E:/public/test 
+  [Waiting for changes]
+*/
+
+// Command with options
+sv --port 8125 --verbose false --wdir dist,public --wignore "/node_modules|(^|[\/\\])\../"
 ```
 
 ## API
@@ -35,7 +43,8 @@ servino.stop()
   root: 'public', // Set root directory that's being served. Default: current directory
   wait: 100, // Realod time between changes. Default(ms): 100
   wdir: ['dist', 'public'], // Paths to exclusively watch for changes. Default: watch everything under root directory
-  verbose: true, // Log changed files. Default: true
+  wignore: '/node_modules|(^|[\/\\])\../', // which's files or folders should be ignored (use Regex)
+  verbose: true // Log changed files. Default: true
 }
 ```
 

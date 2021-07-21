@@ -6,7 +6,6 @@ const argv = require('minimist')(process.argv.slice(2));
 (function () {
 
   console.log(argv);
-   //console.log(JSON.parse(JSON.stringify(argv.wdir)));
 
   let config = {
     host: argv.host,
@@ -15,11 +14,8 @@ const argv = require('minimist')(process.argv.slice(2));
     wait: argv.wait,
     wdir: argv.wdir,
     verbose: argv.verbose,
+    wignore: argv.wignore
   }
 
   Servino.start(config)
-
-  setTimeout(() => {
-    Servino.stop()
-  }, 5000);
 })();

@@ -24,7 +24,8 @@ module.exports = class Servino {
       port: cfg.port || 8125,
       root: rootPath,
       wdir: cfg.wdir || [rootPath],
-      wait: cfg.wait || 100,
+      wait: cfg.wait || 100,      
+      wignore: cfg.wignore || /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
       verbose: cfg.verbose || true
     }
 
@@ -51,11 +52,11 @@ module.exports = class Servino {
           setTimeout(() => server.listen(0, config.host), 200)
         }
         else {
-          Servino.shutdown()
+          self.stop()
         }
       });
 
-    // WebSocket
+    // Create WebSocket
     server.on('upgrade', (request, socket, body) => {
       let ws = new WebSocket(request, socket, body)
 
@@ -66,9 +67,9 @@ module.exports = class Servino {
       }      
     });
 
-    // Watch & reload
+    // Watch & reload files
     watcher = chokidar.watch(config.wdir, {
-      ignored: /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
+      ignored: new RegExp(config.wignore, 'g'),
       persistent: true
     })
       .on('change', path => {
@@ -82,7 +83,7 @@ module.exports = class Servino {
 
           self.log('[Change Detected]', path.replace(/\\/g, '/'))
 
-          Servino.reload({ fileType, path, content })
+          self.reload({ fileType, path, content })
         }, config.wait)
       })
       .on('error', path => {
