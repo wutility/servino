@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const Servino = require('../src/Servino');
+const Servino = require('../src/servino');
 const argv = require('minimist')(process.argv.slice(2));
 
 (function () {
 
-  // console.log(argv);
+  console.log(argv);
+   //console.log(JSON.parse(JSON.stringify(argv.wdir)));
 
   let config = {
     host: argv.host,
@@ -17,4 +18,8 @@ const argv = require('minimist')(process.argv.slice(2));
   }
 
   Servino.start(config)
+
+  setTimeout(() => {
+    Servino.stop()
+  }, 5000);
 })();

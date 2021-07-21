@@ -1,122 +1,113 @@
-const finalhandler = require('finalhandler')
-const serveStatic = require('serve-static')
+const Server = require('./server');
 const WebSocket = require('faye-websocket')
-const serveIndex = require('serve-index')
 const chokidar = require('chokidar')
-const parseurl = require('parseurl')
 const open = require('open')
-
-const http = require('http')
 const path = require('path').posix
 const fs = require('fs')
 
-require('colors')
+const fgColors = require('./colors')
 
-let Servino = {
-  server: null,
-  watcher: null,
-}
+let server = null;
+let watcher = null;
+let clients = [];
+let config = {};
 
-let clients = []
+module.exports = class Servino {
+  static start (cfg) {
 
-Servino.start = function (config = {}) {
-  const host = config.host || '0.0.0.0'
-  const port = config.port || 8125  
-  const wait = config.wait || 100
+    let rootPath = cfg.root
+      ? path.join(process.cwd(), cfg.root).replace(/\\/g, '/')
+      : process.cwd().replace(/\\/g, '/');
 
-  const root = config.root ? path.join(process.cwd(), config.root).replace(/\\/g, '/') : process.cwd().replace(/\\/g, '/')
-  const wdir = config.wdir || [root]
-
-  const verbose = config.verbose || true
-
-  const index = serveIndex(root, { 'icons': true })
-  const serve = serveStatic(root, { index: false })
-
-  const server = http.createServer(function onRequest (req, res) {
-
-    const done = finalhandler(req, res)
-    const filePath = path.join(root, parseurl(req).pathname)
-
-    if (req.url.endsWith('.html') && fs.existsSync(filePath)) {
-
-      let content = fs.readFileSync(filePath, 'utf-8')
-      let wsInject = fs.readFileSync(__dirname + '/injected.html', 'utf8')
-
-      content = content.replace('</body>', `${wsInject}\n</body>`)
-      res.writeHeader(200, { 'Content-Type': 'text/html' })
-      res.write(content)
-      res.end()
+    config = {
+      host: cfg.host || '0.0.0.0',
+      port: cfg.port || 8125,
+      root: rootPath,
+      wdir: cfg.wdir || [rootPath],
+      wait: cfg.wait || 100,
+      verbose: cfg.verbose || true
     }
-    else {
-      serve(req, res, function onNext (err) {
-        if (err) return done(err)
-        index(req, res, done)
+
+    let self = this
+
+    server = Server(config)
+      .listen(config.port, config.host)
+      .on('listening', () => {
+
+        const addr = server.address()
+        const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
+        const serverUrl = `http://${address}:${addr.port}/`
+
+        open(serverUrl) // open in the browser
+
+        self.log('[Serving]', serverUrl)
+        self.log('[Path]', config.root)
+
+        self.log('[Waiting for changes]', '')
       })
-    }
-  })
-    .listen(port, host)
-    .on('listening', () => {
+      .on('error', e => {
+        if (e.code === 'EADDRINUSE') {
+          self.log(`Port ${e.port}`, 'is already in use. Trying another port.')
+          setTimeout(() => server.listen(0, config.host), 200)
+        }
+        else {
+          Servino.shutdown()
+        }
+      });
 
-      Servino.server = server
-      const addr = server.address()
-      const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
-      const serverUrl = `http://${address}:${addr.port}/`  
+    // WebSocket
+    server.on('upgrade', (request, socket, body) => {
+      let ws = new WebSocket(request, socket, body)
 
-      // child.exec('open http://localhost:' + port)
-      open(serverUrl) // open in the browser
+      clients.push(ws)
 
-      console.log('[Serving]'.cyan,  serverUrl.yellow)
-      console.log('[Path]'.cyan, root.yellow)
+      ws.onclose = () => {
+        clients = clients.filter(i => i !== ws)
+      }      
+    });
 
-      verbose && console.log('[Ready for changes]'.cyan)
+    // Watch & reload
+    watcher = chokidar.watch(config.wdir, {
+      ignored: /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
+      persistent: true
     })
-    .on('error', e => {
-      if (e.code === 'EADDRINUSE') {
-        console.error(`Port`, e.port, 'is already in use. Trying another port.')
-        setTimeout(() => server.listen(0, host), 200)
-      }
-      else {
-        Servino.shutdown()
-      }
-    });
+      .on('change', path => {
+        setTimeout(() => {
+          let content = fs.readFileSync(path, 'utf8') // file content
+          path = '/' + path.replace(__dirname, '') // file path
 
-  // WebSocket
-  server.on('upgrade', (request, socket, body) => {
-    const ws = new WebSocket(request, socket, body)
-    ws.onclose = () => clients = clients.filter(i => i !== ws)
-    clients.push(ws)
-  });
+          let fileType = 'reload'
+          if (path.includes('.css')) fileType = 'reloadCss'
+          if (path.includes('.js')) fileType = 'reloadJs'
 
-  // Watch & reload
-  Servino.watcher = chokidar.watch(wdir, {
-    ignored: /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
-    persistent: true
-  })
-    .on('change', path => {
-      setTimeout(() => {
-        let content = fs.readFileSync(path, 'utf8') // file content
-        path = '/' + path.replace(__dirname, '') // file path
+          self.log('[Change Detected]', path.replace(/\\/g, '/'))
 
-        let fileType = 'reload'
-        if (path.includes('.css')) fileType = 'reloadCss'
-        if (path.includes('.js')) type = 'reloadJs'
+          Servino.reload({ fileType, path, content })
+        }, config.wait)
+      })
+      .on('error', path => {
+        self.log('[Error Watch] ---> ', path);
+      });
+  }
 
-        verbose && console.log('[Change Detected]'.green, path.replace(/\\/g, '/').yellow)
-        Servino.reload({ fileType, path, content })
-      }, wait)
-    });
+  static reload (msg) {
+    clients.forEach(ws => ws && ws.send(JSON.stringify(msg)))
+  }
+
+  static async stop () {
+    if (watcher) {
+      await watcher.close()
+    }
+
+    //  close all your connections immediately
+    server.close();
+
+    this.log('[Server Closed]', '')
+  }
+
+  static log (label, msg) {
+    if (config.verbose) {
+      console.log(fgColors.cyan, label, fgColors.yellow, msg, fgColors.reset)
+    }
+  }
 }
-
-Servino.reload = function (msg) {
-  clients.forEach(ws => ws && ws.send(JSON.stringify(msg)))
-}
-
-Servino.shutdown = function () {
-  const watcher = Servino.watcher
-  watcher && watcher.close()
-
-  const server = Servino.server
-  server && server.close()
-}
-
-module.exports = Servino
