@@ -9,8 +9,9 @@ const argv = require('minimist')(process.argv.slice(2));
     port: argv.port,
     root: argv.root,
     wait: argv.wait,
-    wdir: argv.wdir,
+    wdir: argv.wdir ? argv.wdir.split(',') : null,
     verbose: argv.verbose,
+    injection: argv.injection ? JSON.parse(argv.injection) : argv.injection,
     wignore: argv.wignore
   }
 

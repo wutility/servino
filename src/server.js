@@ -5,7 +5,7 @@ const serveIndex = require('serve-index')
 const parseurl = require('parseurl')
 
 const path = require('path').posix
-const fs = require('fs')
+const fs = require('fs');
 
 function onRequest (config) {
   return (req, res) => {

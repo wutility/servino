@@ -1,22 +1,24 @@
 const Server = require('./server');
+
 const WebSocket = require('faye-websocket')
 const chokidar = require('chokidar')
 const open = require('open')
+
 const path = require('path').posix
 const fs = require('fs')
 
 const fgColors = require('./colors')
 
-let server = null;
-let watcher = null;
-let clients = [];
-let config = {};
+let server = null,
+  watcher = null,
+  clients = [],
+  config = {};
 
 module.exports = class Servino {
   static start (cfg) {
 
     let rootPath = cfg.root
-      ? path.join(process.cwd(), cfg.root).replace(/\\/g, '/')
+      ? cfg.isvscode ? cfg.root : path.join(process.cwd(), cfg.root).replace(/\\/g, '/')
       : process.cwd().replace(/\\/g, '/');
 
     config = {
@@ -26,6 +28,7 @@ module.exports = class Servino {
       wdir: cfg.wdir || [rootPath],
       wait: cfg.wait || 100,
       wignore: cfg.wignore || /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
+      injection: false,
       verbose: cfg.verbose || true
     }
 
@@ -37,14 +40,14 @@ module.exports = class Servino {
 
         const addr = server.address()
         const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
-        const serverUrl = `http://${address}:${addr.port}/`
+        const serverUrl = `http://${address}:${addr.port}`
 
         open(serverUrl) // open in the browser
 
         self.log('[Serving]', serverUrl)
-        self.log('[Path]', config.root)
+        self.log('[CWD]', config.root)
 
-        self.log('[Waiting for changes]', '')
+        self.log('[Waiting For Changes]', '')
       })
       .on('error', e => {
         if (e.code === 'EADDRINUSE') {
@@ -70,8 +73,12 @@ module.exports = class Servino {
     // Watch & reload files
     watcher = chokidar.watch(config.wdir, {
       ignored: new RegExp(config.wignore, 'g'),
-      persistent: true
+      persistent: true,
+      ignoreInitial: true
     })
+      .on('add', path => {
+        self.log('[+File To Watch]', `${path.replace(/\\/g, '/')}`, fgColors.green)
+      })
       .on('change', path => {
         setTimeout(() => {
           let content = fs.readFileSync(path, 'utf8') // file content
@@ -83,11 +90,11 @@ module.exports = class Servino {
 
           self.log('[Change Detected]', path.replace(/\\/g, '/'))
 
-          self.reload({ fileType, path, content })
+          self.reload({ fileType, path, content, injection: cfg.injection })
         }, config.wait)
       })
       .on('error', path => {
-        self.log('[Error Watch] ---> ', path);
+        self.log('[Error Watch] ---> ', path, fgColors.red);
       });
   }
 
@@ -100,15 +107,22 @@ module.exports = class Servino {
       await watcher.close()
     }
 
-    //  close all your connections immediately
+    // close all your connections immediately
     server.close();
 
-    this.log('[Server Closed]', '')
+    this.log('[Server Closed]', '...')
   }
 
-  static log (label, msg) {
+  static log (label, msg, color = fgColors.cyan) {
     if (config.verbose) {
-      console.log(fgColors.cyan, label, fgColors.yellow, msg, fgColors.reset)
+      console.log(
+        color,
+        '[' + new Date().toLocaleTimeString() + ']',
+        label,
+        fgColors.yellow,
+        msg,
+        fgColors.reset
+      );
     }
   }
 }

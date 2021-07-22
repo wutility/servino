@@ -19,13 +19,17 @@
   const ws = new WebSocket(address);
 
   ws.onmessage = function (msg) {
-    const { fileType, path, content } = JSON.parse(msg.data)
+    const { fileType, path, content, injection } = JSON.parse(msg.data)
 
-    if (fileType == 'reload') {
+    if (!injection || fileType == 'reload') {
       location.reload()
-    } else if (fileType == 'reloadJs') {
+    }
+
+    if (injection && fileType == 'reloadJs') {
       Function(content.replace('\n', ';').replace('\n', ';'))()
-    } else if (fileType == 'reloadCss') {
+    }
+
+    if (injection && fileType == 'reloadCss') {
       reloadCSS()
     }
   }
