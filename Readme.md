@@ -1,15 +1,16 @@
-# Servino
+# ⚡️ Servino
+Fast and simple zero-configuration dev server with hot reload.
 
 [![NPM version][npm-img]][npm-url] [![Downloads][downloads-img]][npm-url]
 
 ## Install
-```json
+```js
 $ npm i -g servino
 ```
 
 ## CLI
 - **Example 1**
-```json
+```js
 // Command: servino or sv
 servino
 
@@ -20,13 +21,13 @@ servino
 */
 ```
 - **Example 2**
-```json
+```js
 sv --injection true --wait 500
 ```
 
 - **Example 3**
-```json
-sv --port 8125 --verbose false --wdir dist,public --wignore "/node_modules|(^|[\/\\])\\../"
+```js
+sv --port 8125 --verbose false --wdir dist,public --wignore "/node_modules|(^|[\/\\])\../"
 ```
 
 ## API
