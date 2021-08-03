@@ -28,7 +28,8 @@ module.exports = class Servino {
       wdir: cfg.wdir || [rootPath],
       wait: cfg.wait || 100,
       wignore: cfg.wignore || /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
-      injection: false,
+      inject: cfg.inject || false,
+      open: cfg.open || true,
       verbose: cfg.verbose || true
     }
 
@@ -42,7 +43,9 @@ module.exports = class Servino {
         const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
         const serverUrl = `http://${address}:${addr.port}`
 
-        open(serverUrl) // open in the browser
+        if (config.open) {
+          open(serverUrl) // open in the browser
+        }
 
         self.log('[Serving]', serverUrl)
         self.log('[CWD]', config.root)
@@ -70,6 +73,7 @@ module.exports = class Servino {
       }
     });
 
+    console.log(config.wdir);
     // Watch & reload files
     watcher = chokidar.watch(config.wdir, {
       ignored: new RegExp(config.wignore, 'g'),
@@ -79,18 +83,18 @@ module.exports = class Servino {
       .on('add', path => {
         self.log('[+File To Watch]', `${path.replace(/\\/g, '/')}`, fgColors.green)
       })
-      .on('change', path => {
+      .on('change', (filePath, Stats) => {
         setTimeout(() => {
-          let content = fs.readFileSync(path, 'utf8') // file content
-          path = path.replace(__dirname, '') // file path
+          let content = fs.readFileSync(filePath, 'utf8') // file content
+          filePath = filePath.replace(__dirname, '') // file path
 
           let fileType = 'reload'
-          if (path.includes('.css')) fileType = 'reloadCss'
-          if (path.includes('.js')) fileType = 'reloadJs'
+          if (filePath.includes('.css')) fileType = 'reloadCss';
+          if (filePath.includes('.js')) fileType = 'reloadJs';
 
-          self.log('[Change Detected]', path.replace(/\\/g, '/'))
+          self.log('[Change]', `${filePath} (${Stats.size} Byte)`)
 
-          self.reload({ fileType, path, content, injection: cfg.injection })
+          self.reload({ fileType, content, inject: config.inject })
         }, config.wait)
       })
       .on('error', path => {

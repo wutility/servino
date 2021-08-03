@@ -9,25 +9,8 @@ $ npm i -g servino
 ```
 
 ## CLI
-- **Example 1**
-```js
-// Command: servino or sv
-servino
-
-/* -> Example of console ouput
-  [Serving]  http://127.0.0.1:8125
-  [CWD]  E:/public/test 
-  [Waiting For Changes]
-*/
-```
-- **Example 2**
-```js
-sv --injection true --wait 500
-```
-
-- **Example 3**
-```js
-sv --port 8125 --verbose false --wdir dist,public --wignore "/node_modules|(^|[\/\\])\../"
+```shell
+sv --port 8125 --wait 500 --inject true --wdir dist,public --wignore "/node_modules|(^|[\/\\])\../"
 ```
 
 ## API
@@ -45,18 +28,18 @@ servino.stop()
 ```
 
 ## Configuration
-```js
-{
-  host: '127.0.0.1', // Set the server address. Default: 0.0.0.0
-  port: 5000, // Set the server port. Default: 8125
-  root: 'public', // Set root directory that's being served. Default: current working directory
-  wait: 100, // Realod time between changes. Default(ms): 100
-  wdir: ['dist', 'public'], // Paths to watch for changes. Default: watch everything under root directory
-  injection: true, // Inject Css and Javascript files without refresh the browser. Default: false
-  wignore: '/node_modules|(^|[\/\\])\../', // which's files or folders should be ignored
-  verbose: false // Log changed files. Default: true
-}
-```
+
+| Prop     | Example                         | Description                   |
+|----------|---------------------------------|-------------------------------|
+|host      | `'127.0.0.1'`                   | Set the server address      |
+|port      | `8125`                          | Set the server port. |
+|root      | `'public'`                      | Set root directory that's being served. Default: current working directory |
+|wignore   | `'/node_modules|(^|[\/\\])\../'`| which's files or folders should be ignored |
+|wdir      | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
+|wait      | `100`                           | Realod time between changes (ms). |
+|inject    | `false`                         | Inject Css and Javascript files without refresh the browser |
+|open      | `true`                          | Open url on the browser |
+|verbose   | `false`                         | Log changed files |
 
 ## Todo
 - [ ] Support SPA

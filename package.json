@@ -1,6 +1,6 @@
 {
   "name": "servino",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Simple and fast development http server with live reload",
   "bin": {
     "servino": "bin/cli",
@@ -12,10 +12,12 @@
     "bin"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },  
+    "start": "node bin/cli"
+  },
   "dependencies": {
+    "browserify": "^17.0.0",
     "chokidar": "^3.5.2",
+    "esmify": "^2.1.1",
     "faye-websocket": "^0.11.4",
     "finalhandler": "^1.1.2",
     "minimist": "^1.2.5",

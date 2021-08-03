@@ -4,14 +4,24 @@ const Servino = require('../src/servino');
 const argv = require('minimist')(process.argv.slice(2));
 
 (function () {
+
+  const parse = (prop) => {
+    try {
+      return prop ? JSON.parse(prop) : prop
+    } catch (error) {
+      return null
+    }
+  }
+
   let config = {
     host: argv.host,
     port: argv.port,
     root: argv.root,
     wait: argv.wait,
     wdir: argv.wdir ? argv.wdir.split(',') : null,
-    verbose: argv.verbose,
-    injection: argv.injection ? JSON.parse(argv.injection) : argv.injection,
+    verbose: parse(argv.verbose),
+    inject: parse(argv.inject),
+    open: parse(argv.open),
     wignore: argv.wignore
   }
 
