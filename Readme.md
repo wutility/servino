@@ -34,7 +34,7 @@ servino.stop()
 |host      | `'127.0.0.1'`                   | Set the server address      |
 |port      | `8125`                          | Set the server port. |
 |root      | `'public'`                      | Set root directory that's being served. Default: current working directory |
-|wignore   | `/node_modules|(^|[\/\\])\../`| which's files or folders should be ignored |
+|wignore   | `\/node_modules|(^|[\/\\])\..\/`| which's files or folders should be ignored |
 |wdir      | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
 |wait      | `100`                           | Realod time between changes (ms). |
 |inject    | `false`                         | Inject Css and Javascript files without refresh the browser |
