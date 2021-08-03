@@ -1,6 +1,6 @@
 {
   "name": "servino",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Simple and fast development http server with live reload",
   "bin": {
     "servino": "bin/cli",
@@ -15,9 +15,7 @@
     "start": "node bin/cli"
   },
   "dependencies": {
-    "browserify": "^17.0.0",
     "chokidar": "^3.5.2",
-    "esmify": "^2.1.1",
     "faye-websocket": "^0.11.4",
     "finalhandler": "^1.1.2",
     "minimist": "^1.2.5",
@@ -28,12 +26,13 @@
   },
   "keywords": [
     "http",
-    "server",
+    "server",    
     "live",
     "reload",
-    "development",
     "tool",
-    "cli"
+    "cli",
+    "http-server",
+    "live-reload"    
   ],
   "author": "Haikel Fazzani",
   "license": "MIT",

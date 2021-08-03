@@ -1,7 +1,7 @@
 # ⚡️ Servino
 Fast and simple zero-configuration dev server with hot reload.
 
-[![NPM version][npm-img]][npm-url] [![Downloads][downloads-img]][npm-url]
+![][version] ![][downloads] ![][dependency] ![][license]
 
 ## Install
 ```js
@@ -34,12 +34,12 @@ servino.stop()
 |host      | `'127.0.0.1'`                   | Set the server address      |
 |port      | `8125`                          | Set the server port. |
 |root      | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
-|wignore   | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored |
+|wignore   | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored (Watch ignore) |
 |wdir      | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
 |wait      | `100`                           | Realod time between changes (ms). |
 |inject    | `false`                         | Inject Css and Javascript files without refresh the browser |
 |open      | `true`                          | Open url on the browser |
-|verbose   | `false`                         | Log changed files |
+|verbose   | `false`                         | Show logs |
 
 ## Todo
 - [ ] Support SPA
@@ -53,6 +53,7 @@ servino.stop()
 ## License
 MIT
 
-[downloads-img]: http://img.shields.io/npm/dm/servino.svg?style=flat-square
-[npm-img]:       http://img.shields.io/npm/v/servino.svg?style=flat-square
-[npm-url]:       https://npmjs.org/package/servino
+[downloads]: https://badgen.net/npm/dt/servino
+[version]:       http://img.shields.io/npm/v/servino.svg?style=flat-square
+[dependency]:       https://badgen.net/bundlephobia/dependency-count/react
+[license]: https://badgen.net/npm/license/servino
