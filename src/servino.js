@@ -27,10 +27,10 @@ module.exports = class Servino {
       root: rootPath,
       wdir: cfg.wdir || [rootPath],
       wait: cfg.wait || 100,
-      wignore: cfg.wignore || /node_modules|(^|[\/\\])\../, // ignore dotfiles and node_modules
-      inject: cfg.inject || false,
-      open: cfg.open || true,
-      verbose: cfg.verbose || true
+      wignore: cfg.wignore || /node_modules|(^|[\/\\])\../,
+      inject: cfg.inject !== undefined ? cfg.inject : false,
+      open: cfg.open !== undefined ? cfg.open : true,
+      verbose: cfg.verbose !== undefined ? cfg.verbose : true
     }
 
     let self = this
@@ -73,7 +73,6 @@ module.exports = class Servino {
       }
     });
 
-    console.log(config.wdir);
     // Watch & reload files
     watcher = chokidar.watch(config.wdir, {
       ignored: new RegExp(config.wignore, 'g'),

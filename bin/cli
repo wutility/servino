@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const Servino = require('../src/servino');
 const argv = require('minimist')(process.argv.slice(2));
+const Servino = require('../src/servino');
 
 (function () {
 
@@ -13,7 +13,7 @@ const argv = require('minimist')(process.argv.slice(2));
     }
   }
 
-  let config = {
+  Servino.start({
     host: argv.host,
     port: argv.port,
     root: argv.root,
@@ -23,7 +23,5 @@ const argv = require('minimist')(process.argv.slice(2));
     inject: parse(argv.inject),
     open: parse(argv.open),
     wignore: argv.wignore
-  }
-
-  Servino.start(config)
+  });  
 })();

@@ -7,10 +7,12 @@ const parseurl = require('parseurl')
 const path = require('path').posix
 const fs = require('fs');
 
+const colors = require('./colors')
+
 function onRequest (config) {
   return (req, res) => {
-    
-    const done = finalhandler(req, res)    
+
+    const done = finalhandler(req, res)
     const filePath = path.join(config.root, parseurl(req).pathname)
 
     if (req.url.endsWith('.html') && fs.existsSync(config.root)) {
@@ -34,5 +36,12 @@ function onRequest (config) {
     }
   }
 }
+
+['SIGINT', 'SIGTERM'].forEach(signal => {
+  process.on(signal, function () {
+    console.info(colors.green, '[Info] Server stopped.', colors.reset);
+    process.exit();
+  });
+});
 
 module.exports = (config) => http.createServer(onRequest(config))
