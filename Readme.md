@@ -10,21 +10,17 @@ $ npm i -g servino
 
 ## CLI
 ```shell
-sv --port 8125 --wait 500 --inject true --wdir dist,public --wignore "/node_modules|(^|[\/\\])\../"
+sv --port 8125 --delay 500 --inject true --wdir dist,public --ignore "/node_modules|(^|[\/\\])\../"
+
+# short
+sv -p 8125 -d 500 --inject -w dist,public -i "/node_modules|(^|[\/\\])\../"
 ```
 
 ## API
 ```js
 const servino = require('servino')
 
-// start serving
-servino.start(config?)
-
-// reload manually
-servino.reload()
-
-// stop serving
-servino.stop()
+servino(config?: Configuration) : void
 ```
 
 ## Configuration
@@ -34,7 +30,7 @@ servino.stop()
 |host      | `'127.0.0.1'`                   | Set the server address      |
 |port      | `8125`                          | Set the server port. |
 |root      | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
-|wignore   | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored (Watch ignore) |
+|ignore   | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored (Watch ignore) |
 |wdir      | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
 |wait      | `100`                           | Realod time between changes (ms). |
 |inject    | `false`                         | Inject Css and Javascript files without refresh the browser |

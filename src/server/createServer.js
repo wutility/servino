@@ -1,15 +1,16 @@
 const http = require('http')
+const fs = require('fs');
+const path = require('path').posix;
+
 const finalhandler = require('finalhandler')
 const serveStatic = require('serve-static')
 const serveIndex = require('serve-index')
 const parseurl = require('parseurl')
 
-const path = require('path').posix
-const fs = require('fs');
+const Log = require('../util/Log'),
+  open = require('open');
 
-const colors = require('./colors')
-
-function onRequest (config) {
+function onRequest(config) {
   return (req, res) => {
 
     const done = finalhandler(req, res)
@@ -37,11 +38,26 @@ function onRequest (config) {
   }
 }
 
-['SIGINT', 'SIGTERM'].forEach(signal => {
-  process.on(signal, function () {
-    console.info(colors.green, '[Info] Server stopped.', colors.reset);
-    process.exit();
-  });
-});
+function createServer(config) {
+  let server = http.createServer(onRequest(config))
+    .listen(config.port, config.host)
+    .on('listening', () => {
 
-module.exports = (config) => http.createServer(onRequest(config))
+      const addr = server.address()
+      const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address
+      const serverUrl = `http://${address}:${addr.port}`
+
+      if (config.open) {
+        open(serverUrl) // open in the browser
+      }
+
+      const localTime = new Date().toLocaleTimeString();
+      Log('yellow', `[Serving ${localTime}] ${serverUrl}`);
+      Log('yellow', '[CWD] ' + path.relative(process.cwd(), config.root));
+      Log('yellow', '[Waiting For Changes]');
+    });
+
+  return server;
+}
+
+module.exports = createServer

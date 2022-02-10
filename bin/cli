@@ -3,25 +3,26 @@
 const argv = require('minimist')(process.argv.slice(2));
 const Servino = require('../src/servino');
 
-(function () {
-
-  const parse = (prop) => {
-    try {
-      return prop ? JSON.parse(prop) : prop
-    } catch (error) {
-      return null
-    }
+const parse = (prop) => {
+  try {
+    return prop ? JSON.parse(prop) : prop
+  } catch (error) {
+    return null
   }
+}
 
-  Servino.start({
-    host: argv.host,
-    port: argv.port,
-    root: argv.root,
-    wait: argv.wait,
-    wdir: argv.wdir ? argv.wdir.split(',') : null,
-    verbose: parse(argv.verbose),
-    inject: parse(argv.inject),
-    open: parse(argv.open),
-    wignore: argv.wignore
-  });  
-})();
+Servino({
+  host: argv.host || argv.h,
+  port: argv.port || argv.p,
+  root: argv.root || argv.r,
+
+  delay: argv.delay || argv.d,
+
+  wdir: argv.w ? argv.w.split(',') : '.',
+
+  inject: parse(argv.inject),
+  verbose: parse(argv.verbose || argv.v),
+  open: parse(argv.open || argv.o),
+
+  ignore: argv.ignore || argv.i
+});  
