@@ -10,10 +10,10 @@ $ npm i -g servino
 
 ## CLI
 ```shell
-sv --port 8125 --delay 500 --inject true --wdir dist,public --ignore "/node_modules|(^|[\/\\])\../"
+sv --port 8125 --delay 500 --inject true --wdir tests,public --ignore "/node_modules|(^|[\/\\])\../"
 
 # short
-sv -p 8125 -d 500 --inject -w dist,public -i "/node_modules|(^|[\/\\])\../"
+sv -p 8125 -d 500 --inject -w tests,public -i "/node_modules|(^|[\/\\])\../"
 ```
 
 ## API

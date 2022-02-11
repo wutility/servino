@@ -18,8 +18,15 @@
   const address = protocol + window.location.host + window.location.pathname + '/ws';
   const ws = new WebSocket(address);
 
-  ws.onmessage = function (msg) {
-    const { fileType, content, inject } = JSON.parse(msg.data)
+  const onMessages = (msg) => {
+    const { message, fileType, content, inject } = msg.data;
+
+    if (message === 'close-socket') {
+      ws.removeEventListener('message', onMessages);
+      ws.close();
+      console.log('%cLive reload is disabled.', 'color: #bada55');
+      return;
+    }
 
     if (!inject || fileType == 'reload') {
       location.reload()
@@ -32,7 +39,8 @@
     if (inject && fileType == 'reloadCss') {
       reloadCSS()
     }
-  }  
+  }
 
+  ws.addEventListener('message', onMessages);
   console.log('%cLive reload is enabled.', 'color: #bada55');
 </script>

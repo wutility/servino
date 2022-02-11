@@ -10,7 +10,7 @@ let clients = [];
 let watcher;
 
 Monitor.on('start-process', config => {
-  
+
   createServer(config)
     .on('error', e => {
       if (e.code === 'EADDRINUSE') {
@@ -56,7 +56,7 @@ Monitor.on('start-watching-files', config => {
 })
 
 Monitor.on('restart-process', msg => {
-  clients.forEach(ws => ws && ws.send(JSON.stringify(msg)));
+  clients.forEach(ws => ws && ws.send(msg));
 });
 
 Monitor.on('upgrade-process', ({ request, socket, body }) => {
@@ -70,6 +70,7 @@ Monitor.on('upgrade-process', ({ request, socket, body }) => {
 });
 
 Monitor.on('kill-process', (signal) => {
+  clients.forEach(ws => ws && ws.send({ message: 'close-socket' }));
   watcher.close();
   Log('red', `[Server Closed] ${signal || 0}`);
   setTimeout(() => { process.exit(1); }, 1000);
