@@ -50,8 +50,8 @@ Monitor.on('start-watching-files', config => {
         Monitor.emit('restart-process', { fileType, content, inject: config.inject });
       }, config.wait);
     })
-    .on('error', path => {
-      Monitor.emit('kill-process', path);
+    .on('error', error => {
+      Monitor.emit('kill-process', 0, error);
     });
 })
 
@@ -69,11 +69,13 @@ Monitor.on('upgrade-process', ({ request, socket, body }) => {
   }
 });
 
-Monitor.on('kill-process', (signal) => {
+Monitor.on('kill-process', (signal, error) => {
   clients.forEach(ws => ws && ws.send({ message: 'close-socket' }));
-  watcher.close();
-  Log('red', `[Server Closed] ${signal || 0}`);
-  setTimeout(() => { process.exit(1); }, 1000);
+  if (watcher) {
+    watcher.close();
+    Log('red', `[Server Closed] ${signal || 0} ${error}`);
+    setTimeout(() => { process.exit(1); }, 500);
+  }
 });
 
 ["SIGTERM", "SIGINT", "SIGHUP", "SIGQUIT", "exit"].forEach(evt => {

@@ -13,22 +13,22 @@ const Log = require('../util/Log'),
 function onRequest(config) {
   return (req, res) => {
 
-    const done = finalhandler(req, res)
-    const filePath = path.join(config.root, parseurl(req).pathname)
+    const done = finalhandler(req, res);
+    const filePath = path.join(config.root, parseurl(req).pathname);
 
     if (req.url.endsWith('.html') && fs.existsSync(config.root)) {
 
-      let content = fs.readFileSync(filePath, 'utf-8')
-      let wsInject = fs.readFileSync(__dirname + '/injected.html', 'utf8')
+      let content = fs.readFileSync(filePath, 'utf-8');
+      let wsInject = fs.readFileSync(__dirname + '/injected.html', 'utf8');
 
-      content = content.replace('</body>', `${wsInject}\n</body>`)
-      res.writeHeader(200, { 'Content-Type': 'text/html' })
-      res.write(content)
-      res.end()
+      content = content.replace('</body>', `${wsInject}\n</body>`);
+      res.writeHeader(200, { 'Content-Type': 'text/html' });
+      res.write(content);
+      res.end();
     }
     else {
-      const index = serveIndex(config.root, { 'icons': true })
-      const serve = serveStatic(config.root, { index: false })
+      const index = serveIndex(config.root, { 'icons': true });
+      const serve = serveStatic(config.root, { index: false });
 
       serve(req, res, onNext = (err) => {
         if (err) return done(err)

@@ -1,6 +1,6 @@
 {
   "name": "servino",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Simple and fast development http server with live reload",
   "bin": {
     "servino": "bin/cli",

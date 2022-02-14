@@ -18,7 +18,7 @@ Servino({
 
   delay: argv.delay || argv.d,
 
-  wdir: argv.w ? argv.w.split(',') : '.',
+  wdir: argv.wdir || argv.w,
 
   inject: parse(argv.inject),
   verbose: parse(argv.verbose || argv.v),

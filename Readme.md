@@ -20,22 +20,22 @@ sv -p 8125 -d 500 --inject -w tests,public -i "/node_modules|(^|[\/\\])\../"
 ```js
 const servino = require('servino')
 
-servino(config?: Configuration) : void
+servino(options?: object) : void
 ```
 
-## Configuration
+## Available Options
 
-| Prop     | Example                         | Description                   |
+| options/Command     | Example                         | Description                   |
 |----------|---------------------------------|-------------------------------|
-|host      | `'127.0.0.1'`                   | Set the server address      |
-|port      | `8125`                          | Set the server port. |
-|root      | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
-|ignore   | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored (Watch ignore) |
-|wdir      | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
-|wait      | `100`                           | Realod time between changes (ms). |
-|inject    | `false`                         | Inject Css and Javascript files without refresh the browser |
-|open      | `true`                          | Open url on the browser |
-|verbose   | `false`                         | Show logs |
+|`--host` or `-h`      | `'127.0.0.1'`                   | Set the server address      |
+|`--port` or `-p`      | `8125`                          | Set the server port. |
+|`--root` or -r     | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
+|`--ignore` or `-i`  | `/node_modules\|(^\|[\/\\])\../` | which\'s files or folders should be ignored (Watch ignore) |
+|`--wdir` or `-w`     | `['dist', 'public']`            | Paths to watch for changes. Default: watch everything under root directory |
+|`--delay` or `-d`      | `100`                           | Realod time between changes (ms). |
+|`--inject`    | `false`                         | Inject Css and Javascript files without refresh the browser |
+|`--open` or `-o`      | `true`                          | Open url on the browser |
+|`--verbose` or `-v`  | `false`                         | Show logs |
 
 ## Todo
 - [ ] Support SPA
