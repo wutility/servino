@@ -27,6 +27,7 @@ servino(options?: object) : void
 
 | options/Command     | Example                         | Description                   |
 |----------|---------------------------------|-------------------------------|
+|`--config` or `-c`      | `null`                   | config json file directory      |
 |`--host` or `-h`      | `'127.0.0.1'`                   | Set the server address      |
 |`--port` or `-p`      | `8125`                          | Set the server port. |
 |`--root` or -r     | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
@@ -36,6 +37,27 @@ servino(options?: object) : void
 |`--inject`    | `false`                         | Inject Css and Javascript files without refresh the browser |
 |`--open` or `-o`      | `true`                          | Open url on the browser |
 |`--verbose` or `-v`  | `false`                         | Show logs |
+
+## Config file
+```js
+// servino.json
+// A config file can take any of the command line arguments as JSON key values, for example:
+{
+  "host": "0.0.0.0",
+  "port": 8125,
+  "root": ".",
+  "wdir": [
+    "app",
+    "src"
+  ],
+  "delay": 100,
+  "ignore": "**/{node_modules,tests,dist,temp,.git}/*",
+  "inject": true,
+  "open": true,
+  "verbose": true
+}
+
+```
 
 ## Todo
 - [ ] Support SPA

@@ -1,0 +1,14 @@
+{
+  "host": "0.0.0.0",
+  "port": 8125,
+  "root": ".",
+  "wdir": [
+    "app",
+    "src"
+  ],
+  "delay": 100,
+  "ignore": "**/{node_modules,tests,dist,temp,.git}/*",
+  "inject": true,
+  "open": true,
+  "verbose": true
+}

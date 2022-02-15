@@ -12,6 +12,8 @@ const parse = (prop) => {
 }
 
 Servino({
+  configFile: argv.config || argv.c,
+
   host: argv.host || argv.h,
   port: argv.port || argv.p,
   root: argv.root || argv.r,

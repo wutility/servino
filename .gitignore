@@ -5,7 +5,6 @@ notes/
 examples/
 production/
 testr/
-tests/
 
 .cache
 .vscode
