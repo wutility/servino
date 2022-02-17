@@ -29,7 +29,7 @@ Monitor.on('start-process', config => {
 
 Monitor.on('start-watching-files', config => {
   watcher = chokidar.watch(config.wdir, {
-    ignored: new RegExp(config.ignore, 'g'),
+    ignored: config.ignore,
     persistent: true,
     ignoreInitial: true
   })
@@ -73,7 +73,7 @@ Monitor.on('kill-process', (signal, error) => {
   clients.forEach(ws => ws && ws.send({ message: 'close-socket' }));
   if (watcher) {
     watcher.close();
-    Log('red', `[Server Closed] ${signal || 0} ${error}`);
+    Log('red', `[Server Closed] ${signal || 0} ${error || ''}`);
     setTimeout(() => { process.exit(1); }, 500);
   }
 });

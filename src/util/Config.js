@@ -25,7 +25,7 @@ module.exports = function Config(options) {
       root: rootPath,
       wdir: options.wdir ? options.wdir.split(',') : [rootPath],
       delay: options.delay || 100,
-      ignore: options.ignore || /node_modules|(^|[\/\\])\../,
+      ignore: options.ignore ? options.ignore.split(',') : ["node_modules", ".git"],
       inject: options.inject || true,
       open: options.open || true,
       verbose: options.verbose || true

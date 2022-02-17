@@ -3,11 +3,17 @@
   "port": 8125,
   "root": ".",
   "wdir": [
-    "app",
+    "tests",
     "src"
   ],
   "delay": 100,
-  "ignore": "**/{node_modules,tests,dist,temp,.git}/*",
+  "ignore": [
+    "node_modules",
+    "dist",
+    "temp",
+    ".git",
+    "tests"
+  ],
   "inject": true,
   "open": true,
   "verbose": true
