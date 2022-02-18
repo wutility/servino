@@ -16,5 +16,9 @@
   ],
   "inject": true,
   "open": true,
-  "verbose": true
+  "verbose": true,
+  "ssl": [
+    "tests/cert.pem",
+    "tests/key.pem"
+  ]
 }

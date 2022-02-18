@@ -11,8 +11,13 @@ const parse = (prop) => {
   }
 }
 
-Servino({
+const argToArr = (argv) => argv ? argv.split(',').map(v => v.trim()) : argv;
+
+const options = {
   configFile: argv.config || argv.c,
+
+  // ssl certification
+  ssl: argToArr(argv.ssl || argv.s),
 
   host: argv.host || argv.h,
   port: argv.port || argv.p,
@@ -20,11 +25,12 @@ Servino({
 
   delay: argv.delay || argv.d,
 
-  wdir: argv.wdir || argv.w,
-
   inject: parse(argv.inject),
   verbose: parse(argv.verbose || argv.v),
   open: parse(argv.open || argv.o),
 
-  ignore: argv.ignore || argv.i
-});  
+  wdir: argToArr(argv.wdir || argv.w),
+  ignore: argToArr(argv.ignore || argv.i || "node_modules, .git")
+}
+
+Servino(options);  

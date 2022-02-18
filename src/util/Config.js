@@ -20,12 +20,13 @@ module.exports = function Config(options) {
   }
   else {
     initConfig = {
+      ssl: options.ssl || null,
       host: options.host || '0.0.0.0',
       port: options.port || 8125,
       root: rootPath,
-      wdir: options.wdir ? options.wdir.split(',') : [rootPath],
+      wdir: options.wdir || [rootPath],
       delay: options.delay || 100,
-      ignore: options.ignore ? options.ignore.split(',') : ["node_modules", ".git"],
+      ignore: options.ignore,
       inject: options.inject || true,
       open: options.open || true,
       verbose: options.verbose || true

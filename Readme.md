@@ -10,10 +10,14 @@ $ npm i -g servino
 
 ## CLI
 ```shell
-sv --port 8125 --delay 500 --inject true --wdir tests,public --ignore node_modules,.git
+# Getting start
+sv -r src -p 3000
+
+# long command
+sv --port 8125 --delay 500 --inject --wdir tests,public --ignore node_modules,.git
 
 # short
-sv -p 8125 -d 500 --inject -w tests,public -i node_modules,.git
+sv -p 8125 -d 500 --inject -w tests,public -i node_modules,.git -s tests/cert.pem,tests/key.pem
 ```
 
 ## API
@@ -34,9 +38,10 @@ servino(options?: object) : void
 |`--ignore` or `-i`  | `node_modules,.git` | which\'s files or folders should be ignored (Watch ignore) |
 |`--wdir` or `-w`     | `tests,public`            | Paths to watch for changes. Default: watch everything under root directory |
 |`--delay` or `-d`      | `100`                           | Realod time between changes (ms). |
-|`--inject`    | `false`                         | Inject Css and Javascript files without refresh the browser |
+|`--inject`    | `true`                         | Inject Css and Javascript files without refresh the browser |
 |`--open` or `-o`      | `true`                          | Open url on the browser |
-|`--verbose` or `-v`  | `false`                         | Show logs |
+|`--verbose` or `-v`  | `true`                         | Show logs |
+|`--ssl` or `-s`  | `tests/cert.pem,tests/key.pem`                         | ssl certifications |
 
 ## Config file: servino.json
 ```js
@@ -60,8 +65,25 @@ servino(options?: object) : void
   ],
   "inject": true,
   "open": true,
-  "verbose": true
+  "verbose": true,
+  "ssl": [
+    "tests/cert.pem",
+    "tests/key.pem"
+  ]
 }
+```
+
+## TLS/SSL
+First, you need to make sure that openssl is installed correctly, and you have key.pem and cert.pem files. You can generate them using this command:
+
+```
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
+```
+
+Then you need to run the server with -S for enabling SSL and -C for your certificate file.
+```
+// Note: order important
+servino -s tests/cert.pem,tests/key.pem
 ```
 
 ## Todo
