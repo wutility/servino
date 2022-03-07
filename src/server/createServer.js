@@ -49,9 +49,7 @@ function createServer(config) {
     sslCert = {
       cert: fs.readFileSync(path.resolve(process.cwd(), cert)).toString().trim(),
       key: fs.readFileSync(path.resolve(process.cwd(), key)).toString().trim()
-    };
-
-    Log('yellow', `[SSL ENABLED] ${localTime}`);
+    };    
   }
 
   const server = isSSlEnabled ? https.createServer(sslCert, onRequest) : http.createServer(onRequest);
@@ -68,9 +66,12 @@ function createServer(config) {
         open(serverUrl) // open in the browser
       }
 
-      Log('yellow', `[Serving ${localTime}] ${serverUrl}`);
-      Log('yellow', '[CWD] ' + path.relative(process.cwd(), config.root));
-      Log('yellow', '[Waiting For Changes]');
+      if(config.verbose) {
+        Log('yellow', `[Serving ${localTime}] ${serverUrl}`);
+        Log('yellow', '[CWD] ' + path.relative(process.cwd(), config.root));
+        if(isSSlEnabled) Log('yellow', `[SSL ENABLED] ${localTime}`);
+        Log('yellow', '[Waiting For Changes]');
+      }
     });
 
   return server;

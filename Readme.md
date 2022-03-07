@@ -17,7 +17,7 @@ sv -r src -p 3000
 sv --port 8125 --delay 500 --inject --wdir tests,public --ignore node_modules,.git
 
 # short
-sv -p 8125 -d 500 --inject -w tests,public -i node_modules,.git -s tests/cert.pem,tests/key.pem
+sv -p 8125 -d 500 -w tests,public -i node_modules,.git -s tests/cert.pem,tests/key.pem
 ```
 
 ## API
@@ -43,7 +43,7 @@ servino(options?: object) : void
 |`--verbose` or `-v`  | `true`                         | Show logs |
 |`--ssl` or `-s`  | `tests/cert.pem,tests/key.pem`                         | ssl certifications |
 
-## Config file: servino.json
+## Config file: [servino.json](tests/servino.json)
 ```js
 /*
   command: sv -c tests
@@ -80,9 +80,9 @@ First, you need to make sure that openssl is installed correctly, and you have k
 openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
 ```
 
-Then you need to run the server with -S for enabling SSL and -C for your certificate file.
-```
-// Note: order important
+Then you need to run the server with -s for your certificate files.
+```shell
+# Note: order important
 servino -s tests/cert.pem,tests/key.pem
 ```
 
