@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const chokidar = require('chokidar');
 const WebSocket = require('faye-websocket');
 
@@ -8,10 +9,11 @@ const Monitor = require('./MonitorEvent'),
 
 let clients = [];
 let watcher;
+let server;
 
 Monitor.on('start-process', config => {
 
-  createServer(config)
+  server = createServer(config)
     .on('error', e => {
       if (e.code === 'EADDRINUSE') {
         Log('cyan', `Port ${e.port} is already in use. Trying another port.`);
@@ -45,7 +47,7 @@ Monitor.on('start-watching-files', config => {
         if (filePath.includes('.css')) fileType = 'reloadCss';
         if (filePath.includes('.js')) fileType = 'reloadJs';
 
-        Log('cyan', `[Change] ${filePath} (${Stats.size} Byte)`);
+        Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), filePath)} (${Stats.size} Byte)`);
 
         Monitor.emit('restart-process', { fileType, content, inject: config.inject });
       }, config.wait);
@@ -53,7 +55,7 @@ Monitor.on('start-watching-files', config => {
     .on('error', error => {
       Monitor.emit('kill-process', 0, error);
     });
-})
+});
 
 Monitor.on('restart-process', msg => {
   clients.forEach(ws => ws && ws.send(msg));
@@ -73,12 +75,15 @@ Monitor.on('kill-process', (signal, error) => {
   clients.forEach(ws => ws && ws.send({ message: 'close-socket' }));
   if (watcher) {
     watcher.close();
-    Log('red', `[Server Closed] ${signal || 0} ${error || ''}`);
+    server.close();
+
+    Log('red', `[STOP WATCHING] ${signal || 0} ${error || ''}`);
+    Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);
     setTimeout(() => { process.exit(1); }, 500);
   }
 });
 
-["SIGTERM", "SIGINT", "SIGHUP", "SIGQUIT", "exit"].forEach(evt => {
+["SIGTERM", "SIGINT", "SIGHUP", "SIGQUIT"].forEach(evt => {
   process.on(evt, (signal) => {
     Monitor.emit('kill-process', signal);
   });

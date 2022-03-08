@@ -4,8 +4,10 @@ Fast and simple zero-configuration dev server with hot reload.
 ![][version] ![][downloads] ![][dependency] ![][license]
 
 ## Install
-```js
+```shell
 $ npm i -g servino
+# or
+$ npm i servino --save-dev
 ```
 
 ## CLI
