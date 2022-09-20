@@ -4,7 +4,8 @@ const fs = require('fs');
 let initConfig = {};
 
 module.exports = function Config(options) {
-  let rootPath = path.join(process.cwd(), (options.root || '.'));
+  const isEnvVscode = options.isEnvVscode || false;
+  const rootPath = isEnvVscode ? options.root : path.join(process.cwd(), (options.root || '.'));
 
   if (options.configFile) {
     try {
@@ -29,7 +30,7 @@ module.exports = function Config(options) {
       ignore: options.ignore,
       inject: options.inject || true,
       open: options.open || true,
-      verbose: options.verbose || true
+      verbose: options.verbose || true,
     }
   }
 
