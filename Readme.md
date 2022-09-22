@@ -39,7 +39,7 @@ servino(options?: object) : void
 |`--root` or -r     | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
 |`--ignore` or `-i`  | `node_modules,.git` | which\'s files or folders should be ignored (Watch ignore) |
 |`--wdir` or `-w`     | `tests,public`            | Paths to watch for changes. Default: watch everything under root directory |
-|`--delay` or `-d`      | `100`                           | Realod time between changes (ms). |
+|`--delay` or `-d`      | `200`                           | Realod time between changes (ms). |
 |`--inject`    | `true`                         | Inject Css and Javascript files without refresh the browser |
 |`--open` or `-o`      | `true`                          | Open url on the browser |
 |`--verbose` or `-v`  | `true`                         | Show logs |

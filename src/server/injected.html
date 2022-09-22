@@ -19,25 +19,24 @@
   const ws = new WebSocket(address);
 
   const onMessages = (msg) => {
-    const { message, fileType, content, inject } = msg.data;
+    const { message, actionType, content, inject } = JSON.parse(msg.data);
 
-    if (message === 'close-socket') {
+    if (message && message === 'close-socket') {
       ws.removeEventListener('message', onMessages);
       ws.close();
       console.log('%cLive reload is disabled.', 'color: #bada55');
       return;
     }
 
-    if (!inject || fileType == 'reload') {
-      location.reload()
+    if (inject === false) {
+      window.location.reload();
     }
+    else {
+      if (actionType === 'reloadHTML') document.getElementsByTagName("html")[0].innerHTML = content;
 
-    if (inject && fileType == 'reloadJs') {
-      Function(content.replace('\n', ';').replace('\n', ';'))()
-    }
+      if (actionType === 'reloadJs') Function(content.replace('\n', ';').replace('\n', ';'))();
 
-    if (inject && fileType == 'reloadCss') {
-      reloadCSS()
+      if (actionType === 'reloadCss') reloadCSS();
     }
   }
 

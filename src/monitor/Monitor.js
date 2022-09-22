@@ -12,7 +12,6 @@ let watcher;
 let server;
 
 Monitor.on('start-process', config => {
-
   server = createServer(config)
     .on('error', e => {
       if (e.code === 'EADDRINUSE') {
@@ -30,26 +29,20 @@ Monitor.on('start-process', config => {
 });
 
 Monitor.on('start-watching-files', config => {
-  watcher = chokidar.watch(config.wdir, {
-    ignored: config.ignore,
-    persistent: true,
-    ignoreInitial: true
-  })
+  watcher = chokidar.watch(config.wdir, { ignored: config.ignore, persistent: true, ignoreInitial: true })
     .on('add', path => {
-      Log('cyan', `[+File To Watch] ${path.replace(/\\/g, '/')}`);
+      Log('cyan', `[New File To Watch] ${path.replace(/\\/g, '/')}`);
     })
     .on('change', (filePath, Stats) => {
       setTimeout(() => {
-        let content = fs.readFileSync(filePath, 'utf8'); // file content
-        filePath = filePath.replace(__dirname, ''); // file path
+        const content = fs.readFileSync(filePath, 'utf8'); // file content
+        const relativeFilePath = filePath.replace(__dirname, ''); // file path
+        const fileExtension = relativeFilePath.match(/\.[0-9a-z]+$/i)[0];
+        const actionType = fileExtension === '.css' ? 'reloadCss' : fileExtension === '.js' ? 'reloadJs' : 'reloadHTML';
 
-        let fileType = 'reload'
-        if (filePath.includes('.css')) fileType = 'reloadCss';
-        if (filePath.includes('.js')) fileType = 'reloadJs';
+        Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), relativeFilePath)} (${Stats.size} Byte)`);
 
-        Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), filePath)} (${Stats.size} Byte)`);
-
-        Monitor.emit('restart-process', { fileType, content, inject: config.inject });
+        Monitor.emit('restart-process', { actionType, content, ...config });
       }, config.wait);
     })
     .on('error', error => {
@@ -58,7 +51,7 @@ Monitor.on('start-watching-files', config => {
 });
 
 Monitor.on('restart-process', msg => {
-  clients.forEach(ws => ws && ws.send(msg));
+  clients.forEach(ws => ws && ws.send(JSON.stringify(msg)));
 });
 
 Monitor.on('upgrade-process', ({ request, socket, body }) => {
@@ -72,14 +65,18 @@ Monitor.on('upgrade-process', ({ request, socket, body }) => {
 });
 
 Monitor.on('kill-process', (signal, error) => {
-  clients.forEach(ws => ws && ws.send({ message: 'close-socket' }));
+  clients.forEach(ws => {
+    if (ws) {
+      ws.send(JSON.stringify({ message: 'close-socket' }));
+      ws.close();
+    }
+  });
   if (watcher) {
     watcher.close();
     server.close();
 
     Log('red', `[STOP WATCHING] ${signal || 0} ${error || ''}`);
-    Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);
-    setTimeout(() => { process.exit(1); }, 500);
+    Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);    
   }
 });
 

@@ -26,7 +26,7 @@ module.exports = function Config(options) {
       port: options.port || 8125,
       root: rootPath,
       wdir: options.wdir || [rootPath],
-      delay: options.delay || 100,
+      delay: options.delay || 200,
       ignore: options.ignore,
       inject: options.inject || true,
       open: options.open || true,
