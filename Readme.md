@@ -24,9 +24,9 @@ sv -p 8125 -d 500 -w tests,public -i node_modules,.git -s tests/cert.pem,tests/k
 
 ## API
 ```js
-const servino = require('servino')
+const Servino = require('Servino')
 
-servino(options?: object) : void
+Servino(options?: object) : void
 ```
 
 ## Available Options

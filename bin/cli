@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const argv = require('minimist')(process.argv.slice(2));
-const Servino = require('../src/servino');
+const Servino = require('../src/Servino');
 const pkg = require('../package.json');
 const helpStr = require('./help');
 

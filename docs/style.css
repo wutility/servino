@@ -4,13 +4,13 @@
 
 :root {
   --black: #13141a;
-    --dark: #0e0e15;
-    --gray: #353540;
-    --white: #fff;
-    --green: #5aff49;
-    --orange: #f89b4b;
-    --blue: #4b65f8;
-    --bg-linear: linear-gradient(180deg, #0e0f15, rgb(23 23 38 / 85%)), url(https://github.com/wutility/servino/blob/main/2022-10-07.png?raw=true);
+  --dark: #0e0e15;
+  --gray: #353540;
+  --white: #fff;
+  --green: #5aff49;
+  --orange: #f89b4b;
+  --blue: #4b65f8;
+  --bg-linear: linear-gradient(180deg, #0e0f15, rgb(23 23 38 / 85%)), url(https://github.com/wutility/servino/blob/main/2022-10-07.png?raw=true);
 }
 
 body {
@@ -110,10 +110,10 @@ th {
   padding: 10px;
 }
 
-.capture {  
+.capture {
   object-fit: contain;
   max-width: -webkit-fill-available;
-  border: 15px solid var(--dark);  
+  border: 15px solid var(--dark);
   overflow: hidden;
 }
 
@@ -171,9 +171,13 @@ svg {
   color: var(--blue);
 }
 
-.bg-gray {background-color: var(--gray);}
+.bg-gray {
+  background-color: var(--gray);
+}
 
-.transparent {background-color: transparent;}
+.transparent {
+  background-color: transparent;
+}
 
 .d-flex {
   display: flex;
@@ -191,7 +195,9 @@ svg {
   padding: 0;
 }
 
-.p-2 {padding: 20px;}
+.p-2 {
+  padding: 20px;
+}
 
 .text-center {
   text-align: center;
@@ -201,9 +207,13 @@ svg {
   text-transform: uppercase;
 }
 
-.shadow-0 {box-shadow: none;}
+.shadow-0 {
+  box-shadow: none;
+}
 
-.br7 {border-radius: 7px;}
+.br7 {
+  border-radius: 7px;
+}
 
 @media only screen and (max-width: 600px) {
 

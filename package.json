@@ -1,7 +1,7 @@
 {
   "name": "servino",
-  "version": "1.0.6",
-  "description": "Zero-configuration http server with live reload",
+  "version": "1.0.7",
+  "description": "Zero-configuration http server with hot reload",
   "bin": {
     "servino": "bin/cli",
     "sv": "bin/cli"
@@ -34,6 +34,8 @@
     "reload",
     "tool",
     "cli",
+    "http server",
+    "hot reload",
     "http-server",
     "live-reload"
   ],
