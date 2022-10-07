@@ -35,7 +35,7 @@ if (argv.version || argv.v) {
 
     delay: argv.delay || argv.d,
 
-    inject: parse(argv.inject),
+    inject: parse(argv.inject || argv.I),
     verbose: parse(argv.verbose || argv.V),
     open: parse(argv.open || argv.o),
 

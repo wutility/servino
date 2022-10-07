@@ -1,7 +1,7 @@
 {
   "name": "servino",
-  "version": "1.0.5",
-  "description": "Simple and fast development http server with live reload",
+  "version": "1.0.6",
+  "description": "Zero-configuration http server with live reload",
   "bin": {
     "servino": "bin/cli",
     "sv": "bin/cli"
@@ -39,7 +39,7 @@
   ],
   "author": "Haikel Fazzani",
   "license": "MIT",
-  "homepage": "https://github.com/wutility/servino-live",
+  "homepage": "https://wutility.github.io/servino",
   "bugs": {
     "url": "https://github.com/wutility/servino-live/issues"
   },
