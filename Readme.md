@@ -34,7 +34,7 @@ Servino(options?: object) : void
 | options/Command     | Example                         | Description                   |
 |----------|---------------------------------|-------------------------------|
 |`--config` or `-c`      | `null`                   | specify where config json file is located (directory)     |
-|`--host` or `-h`      | `'127.0.0.1'`                   | Set the server address      |
+|`--host` or `-H`      | `'127.0.0.1'`                   | Set the server address      |
 |`--port` or `-p`      | `8125`                          | Set the server port. |
 |`--root` or `-r`     | `'public'`                      | Set root directory that\'s being served. Default: current working directory |
 |`--ignore` or `-i`  | `node_modules,.git` | which\'s files or folders should be ignored (Watch ignore) |

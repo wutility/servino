@@ -29,7 +29,7 @@ if (argv.version || argv.v) {
     // ssl certification
     ssl: argToArr(argv.ssl || argv.s),
 
-    host: argv.host || argv.h,
+    host: argv.host || argv.H,
     port: argv.port || argv.p,
     root: argv.root || argv.r,
 
