@@ -1,6 +1,6 @@
 {
   "name": "servino",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple and fast development http server with live reload",
   "bin": {
     "servino": "bin/cli",
@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "start": "node bin/cli",
+    "docs": "node bin/cli -r docs",
     "test": "node bin/cli -w tests"
   },
   "dependencies": {

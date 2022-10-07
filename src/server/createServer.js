@@ -63,7 +63,7 @@ function createServer(config) {
       const addr = server.address();
       const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address;
       const serverUrl = `${protocol}://${address}:${addr.port}`;
-
+console.log(config);
       if (config.open) {
         open(serverUrl) // open in the browser
       }

@@ -11,6 +11,8 @@ let clients = [];
 let watcher;
 let server;
 
+const validFileExtensions = ['.js', '.ts', '.html', '.htm', '.css', '.scss', '.less'];
+
 Monitor.on('start-process', config => {
   server = createServer(config)
     .on('error', e => {
@@ -35,14 +37,20 @@ Monitor.on('start-watching-files', config => {
     })
     .on('change', (filePath, Stats) => {
       setTimeout(() => {
+
         const content = fs.readFileSync(filePath, 'utf8'); // file content
         const relativeFilePath = filePath.replace(__dirname, ''); // file path
         const fileExtension = relativeFilePath.match(/\.[0-9a-z]+$/i)[0];
-        const actionType = fileExtension === '.css' ? 'reloadCss' : fileExtension === '.js' ? 'reloadJs' : 'reloadHTML';
 
-        Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), relativeFilePath)} (${Stats.size} Byte)`);
+        if (validFileExtensions.includes(fileExtension)) {
+          const actionType = ['.css', '.scss', '.less'].includes(fileExtension)
+            ? 'reloadCss' : ['.js', '.ts'].includes(fileExtension) ? 'reloadJs'
+              : 'reloadHTML';
 
-        Monitor.emit('restart-process', { actionType, content, ...config });
+          Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), relativeFilePath)} (${Stats.size} Byte)`);
+
+          Monitor.emit('restart-process', { actionType, content, ...config });
+        }
       }, config.wait);
     })
     .on('error', error => {
@@ -76,7 +84,7 @@ Monitor.on('kill-process', (signal, error) => {
     server.close();
 
     Log('red', `[STOP WATCHING] ${signal || 0} ${error || ''}`);
-    Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);    
+    Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);
   }
 });
 

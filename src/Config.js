@@ -16,7 +16,7 @@ module.exports = function Config(options) {
 
       initConfig = JSON.parse(jsonConfig);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   }
   else {
@@ -28,9 +28,9 @@ module.exports = function Config(options) {
       wdir: options.wdir || [rootPath],
       delay: options.delay || 200,
       ignore: options.ignore,
-      inject: options.inject || true,
-      open: options.open || true,
-      verbose: options.verbose || true,
+      inject: options.inject === undefined ? true : options.inject,
+      open: options.open === undefined ? true : options.open,
+      verbose: options.verbose === undefined ? true : options.verbose,
     }
   }
 

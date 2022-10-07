@@ -1,0 +1,229 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #13141a;
+    --dark: #0e0e15;
+    --gray: #353540;
+    --white: #fff;
+    --green: #5aff49;
+    --orange: #f89b4b;
+    --blue: #4b65f8;
+    --bg-linear: linear-gradient(180deg, #0e0f15, rgb(23 23 38 / 85%)), url(https://github.com/wutility/servino/blob/main/2022-10-07.png?raw=true);
+}
+
+body {
+  color: var(--white);
+  background-color: var(--dark);
+  background: var(--bg-linear);
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(3px);
+}
+
+main {
+  width: 70%;
+  margin: 30px auto;
+  background-color: var(--dark);
+  background: var(--bg-linear);
+  color: var(--white);
+  backdrop-filter: blur(3px);
+  border-radius: 7px;
+  box-shadow: 0 4px 10px 0 rgb(0 0 0 / 10%), 0 1px 18px 0 rgb(0 0 0 / 10%), 0 3px 5px 0 rgb(0 0 0 / 14%);
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 45pt;
+  text-transform: capitalize;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 2px;
+}
+
+h2 {
+  color: var(--green);
+  font-size: 20pt;
+}
+
+h3 {
+  font-size: 17pt;
+}
+
+p {
+  font-size: 1.2rem;
+  word-wrap: break-word;
+}
+
+a {
+  color: var(--green);
+  display: block;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.1s linear;
+}
+
+nav {
+  width: 70%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+section {
+  padding: 30px 50px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  font-size: 1.2rem;
+  padding: 5px;
+}
+
+nav li {
+  list-style: none;
+  padding: 0 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 10px;
+}
+
+table,
+td,
+th {
+  border: 1px solid var(--dark);
+}
+
+td,
+th {
+  padding: 10px;
+}
+
+.capture {  
+  object-fit: contain;
+  max-width: -webkit-fill-available;
+  border: 15px solid var(--dark);  
+  overflow: hidden;
+}
+
+.box,
+pre {
+  border-radius: 7px;
+  font-family: "Fira Code", "Hack", "Source Code Pro", "SF Mono", "Inconsolata", monospace;
+}
+
+pre {
+  width: fit-content;
+  margin: auto;
+  color: var(--dark);
+  background-color: var(--green);
+  border: 0;
+  font-size: 1rem;
+  padding: 15px 20px;
+  outline: none;
+}
+
+svg {
+  margin-right: 10px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mt-3 {
+  margin-top: 30px;
+}
+
+.ml-1 {
+  margin-left: 10px;
+}
+
+.bg-green {
+  background-color: var(--green);
+  color: var(--dark);
+}
+
+.dark {
+  color: var(--dark);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.bg-gray {background-color: var(--gray);}
+
+.transparent {background-color: transparent;}
+
+.d-flex {
+  display: flex;
+}
+
+.pl-0 {
+  padding-left: 0;
+}
+
+.pr-0 {
+  padding-right: 0;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-2 {padding: 20px;}
+
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.shadow-0 {box-shadow: none;}
+
+.br7 {border-radius: 7px;}
+
+@media only screen and (max-width: 600px) {
+
+  main,
+  nav {
+    width: 95%;
+  }
+
+  section,
+  nav {
+    padding: 10px 15px;
+  }
+
+  section {
+    padding: 10px 15px;
+  }
+
+  .grid-2 {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

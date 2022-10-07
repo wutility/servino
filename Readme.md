@@ -42,7 +42,7 @@ servino(options?: object) : void
 |`--delay` or `-d`      | `200`                           | Realod time between changes (ms). |
 |`--inject`    | `true`                         | Inject Css and Javascript files without refresh the browser |
 |`--open` or `-o`      | `true`                          | Open url on the browser |
-|`--verbose` or `-v`  | `true`                         | Show logs |
+|`--verbose` or `-V`  | `true`                         | Show logs |
 |`--ssl` or `-s`  | `tests/cert.pem,tests/key.pem`                         | ssl certifications |
 
 ## Config file: [servino.json](tests/servino.json)

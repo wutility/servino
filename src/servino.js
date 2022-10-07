@@ -1,5 +1,5 @@
 const Monitor = require('./monitor/Monitor');
-const Config = require('./util/Config')
+const Config = require('./Config')
 
 module.exports = function Servino(options) {
   const config = Config(options);

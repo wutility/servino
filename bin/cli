@@ -2,6 +2,8 @@
 
 const argv = require('minimist')(process.argv.slice(2));
 const Servino = require('../src/servino');
+const pkg = require('../package.json');
+const helpStr = require('./help');
 
 const parse = (prop) => {
   try {
@@ -13,24 +15,33 @@ const parse = (prop) => {
 
 const argToArr = (argv) => argv ? argv.split(',').map(v => v.trim()) : argv;
 
-const options = {
-  configFile: argv.config || argv.c,
-
-  // ssl certification
-  ssl: argToArr(argv.ssl || argv.s),
-
-  host: argv.host || argv.h,
-  port: argv.port || argv.p,
-  root: argv.root || argv.r,
-
-  delay: argv.delay || argv.d,
-
-  inject: parse(argv.inject),
-  verbose: parse(argv.verbose || argv.v),
-  open: parse(argv.open || argv.o),
-
-  wdir: argToArr(argv.wdir || argv.w),
-  ignore: argToArr(argv.ignore || argv.i || "node_modules, .git")
+if (argv.help || argv.h) {
+  console.log("\x1b[33m", helpStr, '\nservino@' + pkg.version, "\x1b[0m");
+  return
 }
+if (argv.version || argv.v) {
+  if (pkg.name === 'servino') console.log('v' + pkg.version);
+  return
+} else {
+  const options = {
+    configFile: argv.config || argv.c,
 
-Servino(options);  
+    // ssl certification
+    ssl: argToArr(argv.ssl || argv.s),
+
+    host: argv.host || argv.h,
+    port: argv.port || argv.p,
+    root: argv.root || argv.r,
+
+    delay: argv.delay || argv.d,
+
+    inject: parse(argv.inject),
+    verbose: parse(argv.verbose || argv.V),
+    open: parse(argv.open || argv.o),
+
+    wdir: argToArr(argv.wdir || argv.w),
+    ignore: argToArr(argv.ignore || argv.i || "node_modules, .git")
+  }
+
+  Servino(options)
+}
