@@ -5,6 +5,7 @@ tests/
 lib/
 notes/
 testr/
+docs/
 
 .gitignore
 .cache
