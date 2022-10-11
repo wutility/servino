@@ -43,5 +43,6 @@ if (argv.version || argv.v) {
     ignore: argToArr(argv.ignore || argv.i || "node_modules, .git")
   }
 
-  Servino(options)
+ const servino = Servino(options);
+  servino.start()
 }

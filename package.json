@@ -1,6 +1,6 @@
 {
   "name": "servino",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Zero-configuration http server with hot reload",
   "bin": {
     "servino": "bin/cli",
@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node bin/cli",
     "docs": "node bin/cli -r docs",
-    "test": "node bin/cli -w tests"
+    "test": "node bin/cli -r tests -w tests -o false"
   },
   "dependencies": {
     "chokidar": "^3.5.3",
@@ -22,10 +22,8 @@
     "finalhandler": "^1.2.0",
     "minimist": "^1.2.5",
     "open": "^8.4.0",
-    "parseurl": "^1.3.3",
     "serve-index": "^1.9.1",
-    "serve-static": "^1.15.0",
-    "ws": "^8.8.1"
+    "serve-static": "^1.15.0"
   },
   "keywords": [
     "http",

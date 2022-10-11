@@ -19,7 +19,7 @@
   const ws = new WebSocket(address);
 
   const onMessages = (msg) => {
-    const { message, actionType, content, inject } = JSON.parse(msg.data);
+    const { message, content, inject, fileExtension } = JSON.parse(msg.data);
 
     if (message && message === 'close-socket') {
       ws.removeEventListener('message', onMessages);
@@ -32,14 +32,12 @@
       window.location.reload();
     }
     else {
-      if (actionType === 'reloadHTML') document.getElementsByTagName("html")[0].innerHTML = content;
-
-      if (actionType === 'reloadJs') Function(content.replace('\n', ';').replace('\n', ';'))();
-
-      if (actionType === 'reloadCss') reloadCSS();
+      if (['.html', '.htm', '.xhtml'].includes(fileExtension)) document.getElementsByTagName("html")[0].innerHTML = content;
+      if (['.js', '.ts', '.json'].includes(fileExtension)) Function(content.replace('\n', ';').replace('\n', ';'))();
+      if (['.css', '.scss', '.less'].includes(fileExtension)) reloadCSS();
     }
-  }
 
+    console.log('%cLive reload is enabled.', 'color: #bada55');
+  }
   ws.addEventListener('message', onMessages);
-  console.log('%cLive reload is enabled.', 'color: #bada55');
 </script>

@@ -1,15 +1,15 @@
 const http = require('http'),
   https = require('https'),
-  fs = require('fs'),
-  path = require('path').posix;
+  { parse } = require('url'),
+  { join, resolve, relative } = require('path').posix,
+  { readFileSync, existsSync } = require('fs');
 
 const finalhandler = require('finalhandler');
 const serveStatic = require('serve-static');
 const serveIndex = require('serve-index');
-const parseurl = require('parseurl');
+const open = require('open');
 
-const Log = require('../util/Log'),
-  open = require('open');
+const Log = require('../util/Log');
 
 const localTime = new Date().toLocaleTimeString();
 let sslCert = {};
@@ -18,14 +18,20 @@ let protocol = 'http';
 function createServer(config) {
   const onRequest = (req, res) => {
     const done = finalhandler(req, res);
-    const filePath = path.join(config.root, parseurl(req).pathname);
+    const filePath = join(config.root, parse(req.url).pathname);
 
-    if (req.url.endsWith('.html') && fs.existsSync(config.root)) {
+    if (req.url.endsWith('.html') && existsSync(config.root)) {
 
-      let content = fs.readFileSync(filePath, 'utf-8');
-      let wsInject = fs.readFileSync(__dirname + '/injected.html', 'utf8');
+      let content = readFileSync(filePath, 'utf-8');
+      let wsInject = readFileSync(__dirname + '/injected.html', 'utf8');
 
       content = content.replace('</body>', `${wsInject}\n</body>`);
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Cache-control', 'no-store');
+      res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Range');
+
       res.writeHeader(200, { 'Content-Type': 'text/html' });
       res.write(content);
       res.end();
@@ -49,8 +55,8 @@ function createServer(config) {
     protocol = 'https';
 
     sslCert = {
-      cert: fs.readFileSync(path.resolve(process.cwd(), cert)).toString().trim(),
-      key: fs.readFileSync(path.resolve(process.cwd(), key)).toString().trim()
+      cert: readFileSync(resolve(process.cwd(), cert)).toString().trim(),
+      key: readFileSync(resolve(process.cwd(), key)).toString().trim()
     };
   }
 
@@ -63,14 +69,14 @@ function createServer(config) {
       const addr = server.address();
       const address = addr.address === '0.0.0.0' ? '127.0.0.1' : addr.address;
       const serverUrl = `${protocol}://${address}:${addr.port}`;
-console.log(config);
+
       if (config.open) {
         open(serverUrl) // open in the browser
       }
 
       if (config.verbose) {
         Log('yellow', `> [START SERVER ${localTime}] ${serverUrl}`);
-        Log('yellow', '> [ROOT DIR] ' + path.relative(process.cwd(), config.root));
+        Log('yellow', '> [ROOT DIR] ' + relative(process.cwd(), config.root));
         Log('cyan', '> [WATCHING DIR] ' + config.wdir);
 
         if (isSSlEnabled) Log('yellow', `[SSL ENABLED] ${localTime}`);

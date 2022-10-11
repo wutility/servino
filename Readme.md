@@ -26,7 +26,10 @@ sv -p 8125 -d 500 -w tests,public -i node_modules,.git -s tests/cert.pem,tests/k
 ```js
 const Servino = require('Servino')
 
-Servino(options?: object) : void
+const servino = Servino(options?: object) : void
+
+servino.start() // start server
+servino.stop() // stop server
 ```
 
 ## Available Options

@@ -11,7 +11,7 @@ let clients = [];
 let watcher;
 let server;
 
-const validFileExtensions = ['.js', '.ts', '.html', '.htm', '.css', '.scss', '.less'];
+const validFileExtensions = ['.json', '.js', '.ts', '.html', '.htm', '.xhtml', '.css', '.scss', '.less'];
 
 Monitor.on('start-process', config => {
   server = createServer(config)
@@ -43,13 +43,8 @@ Monitor.on('start-watching-files', config => {
         const fileExtension = relativeFilePath.match(/\.[0-9a-z]+$/i)[0];
 
         if (validFileExtensions.includes(fileExtension)) {
-          const actionType = ['.css', '.scss', '.less'].includes(fileExtension)
-            ? 'reloadCss' : ['.js', '.ts'].includes(fileExtension) ? 'reloadJs'
-              : 'reloadHTML';
-
           Log('cyan', `[FILE CHANGE] ${path.relative(process.cwd(), relativeFilePath)} (${Stats.size} Byte)`);
-
-          Monitor.emit('restart-process', { actionType, content, ...config });
+          Monitor.emit('restart-process', { content, fileExtension, ...config });
         }
       }, config.wait);
     })
@@ -86,6 +81,8 @@ Monitor.on('kill-process', (signal, error) => {
     Log('red', `[STOP WATCHING] ${signal || 0} ${error || ''}`);
     Log('red', `[STOP SERVER] ${signal || 0} ${error || ''}`);
   }
+
+  setTimeout(() => { process.exit(1) }, 100);
 });
 
 ["SIGTERM", "SIGINT", "SIGHUP", "SIGQUIT"].forEach(evt => {
